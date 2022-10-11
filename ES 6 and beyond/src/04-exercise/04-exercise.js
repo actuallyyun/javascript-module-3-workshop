@@ -17,7 +17,10 @@
  */
 
 // Finish the code of the function
-function exercise04() {}
+function exercise04(array) {
+    const [a, b, c, ...rest] = array
+    return b
+}
 
 // Don’t change the code bellow this line
 export default exercise04;

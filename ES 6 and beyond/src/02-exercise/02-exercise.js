@@ -41,7 +41,11 @@
  */
 
 // Finish the code of the function
-function exercise02() {}
+function exercise02(person) {
+    const { firstName = "Default firstName", lastName = "Default lastName" } = person
+    return `Hello I am ${firstName} ${lastName}`
+
+}
 
 // Don’t change the code bellow this line
 export default exercise02;

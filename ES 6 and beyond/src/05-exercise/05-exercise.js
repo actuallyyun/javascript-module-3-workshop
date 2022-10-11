@@ -24,7 +24,10 @@
  */
 
 // Finish the code of the function
-function exercise05() {}
+function exercise05(array) {
+    const [a, b = "DEFAULT", c, ...rest] = array
+    return b
+}
 
 // Don’t change the code bellow this line
 export default exercise05;
