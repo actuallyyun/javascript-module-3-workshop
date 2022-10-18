@@ -21,13 +21,19 @@ const pokemonCardContainer = document.querySelector("[data-pokemon-cards-contain
 const fetchPokemonData = (url) => {
     fetch(url)
         .then(res => res.json())
-        .then(data =>
-            processPokemonData(data))
+        .then(data => {
+            processPokemonData(data)
+            //Set the global variable pokemonUrl to next page
+            pokemonUrl = data.next
+        })
+
 }
+
 //1.3 Sort data by pokemon name alphabetically
 const processPokemonData = (data) => {
     const processedData = data.results.sort((a, b) => a.name.localeCompare(b.name))
     displayPokemon(processedData)
+
 }
 
 //1.4 Display pokemon 
@@ -63,11 +69,11 @@ const displayPokemon = (data) => {
 
 }
 
-function setPokemonIdAndImage(pokemonUrl, card) {
+function setPokemonIdAndImage(url, card) {
     const id = card.querySelector("[data-pokemon-id")
     const image = card.querySelector("[data-pokemon-image]")
 
-    fetch(`${pokemonUrl}`)
+    fetch(url)
         .then(res => res.json())
         .then(data => {
             // console.log(data)
@@ -117,7 +123,12 @@ searchInput.addEventListener("input", (e) => {
     })
 })
 
+//Step 3 Show more Pokemons
+const showMorePokemonBtn = document.querySelector("#show-more-pokemons")
+showMorePokemonBtn.addEventListener('click', (e) => {
+    fetchPokemonData(pokemonUrl)
 
+})
 
 
 
