@@ -1,47 +1,38 @@
 
 //Global variable
 let pokemonUrl = "https://pokeapi.co/api/v2/pokemon/"
-
-const searchInput = document.querySelector("[data-search]")
-
 let pokemons = []
-
-searchInput.addEventListener("input", (e) => {
-    const value = e.target.value
-    pokemons.forEach(pokemon => {
-        const isVisible = pokemon.name.includes(value)
-        if (!isVisible) {
-            pokemon.element.classList.add("d-none")
-        }
-        else {
-            pokemon.element.classList.remove("d-none")
-        }
-    })
-})
-
-
-const pokemonCardTemplate = document.querySelector("[data-pokemon-template]")
-const pokemonCardContainer = document.querySelector("[data-pokemon-cards-container]")
 
 
 //Util functions
-function upperCasePokemon(name) {
+const upperCasePokemon = (name) => {
     return name.split('')[0].toUpperCase() + name.slice(1)
 }
 
 
-// Fetch all the pokemons 
-fetch(pokemonUrl)
-    .then(res => res.json())
-    .then(data => {
-        // sort data by alphabetic order of pokemon names
-        let sortedData = data.results.sort((a, b) => a.name.localeCompare(b.name))
-        createPokemonCard(sortedData)
-        console.log(sortedData)
-    })
+// Step 1: Display pokemons
 
+//1.1 Select pokemon card templates and containers
 
-function createPokemonCard(data) {
+const pokemonCardTemplate = document.querySelector("[data-pokemon-template]")
+const pokemonCardContainer = document.querySelector("[data-pokemon-cards-container]")
+
+//1.2 Fetch pokemon data
+const fetchPokemonData = (url) => {
+    fetch(url)
+        .then(res => res.json())
+        .then(data =>
+            processPokemonData(data))
+}
+//1.3 Sort data by pokemon name alphabetically
+const processPokemonData = (data) => {
+    const processedData = data.results.sort((a, b) => a.name.localeCompare(b.name))
+    displayPokemon(processedData)
+}
+
+//1.4 Display pokemon 
+const displayPokemon = (data) => {
+    console.log(data)
     //Create a div with Bootstrap .row class
     const divRow = document.createElement("div")
     divRow.classList.add("row")
@@ -64,12 +55,12 @@ function createPokemonCard(data) {
         divRow.append(divCol)
         pokemonCardContainer.append(divRow)
 
-
         addEventListenerToCard(card)
 
         return { name: pokemon.name, element: divCol }
 
     })
+
 }
 
 function setPokemonIdAndImage(pokemonUrl, card) {
@@ -83,8 +74,6 @@ function setPokemonIdAndImage(pokemonUrl, card) {
             id.textContent = `#${data.id}`
             image.src = data.sprites.other.home.front_default
             setPokemonColor(data.id, card, id)
-            console.log(data)
-
         })
 }
 
@@ -104,16 +93,34 @@ function setPokemonColor(pokemonId, card, id) {
 
 
 function addEventListenerToCard(card) {
-    console.log(card)
     card.addEventListener('click', function (event) {
         //hide the card and show pokemon info
-
         pokemonCardContainer.classList.add('d-none')
         showPokemonInfo(card)
-
     })
 }
 
-function showPokemonInfo(card) {
 
-}
+
+//Step 2 Setup the search box
+const searchInput = document.querySelector("[data-search]")
+searchInput.addEventListener("input", (e) => {
+    const value = e.target.value
+    pokemons.forEach(pokemon => {
+        const isVisible = pokemon.name.includes(value)
+        if (!isVisible) {
+            pokemon.element.classList.add("d-none")
+        }
+        else {
+            pokemon.element.classList.remove("d-none")
+        }
+    })
+})
+
+
+
+
+
+
+//Evoke the fetch call function
+fetchPokemonData(pokemonUrl)
