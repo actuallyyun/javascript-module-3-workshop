@@ -1,4 +1,7 @@
 
+//Global variable
+let pokemonUrl = "https://pokeapi.co/api/v2/pokemon/"
+
 const searchInput = document.querySelector("[data-search]")
 
 let pokemons = []
@@ -28,7 +31,7 @@ function upperCasePokemon(name) {
 
 
 // Fetch all the pokemons 
-fetch("https://pokeapi.co/api/v2/pokemon/?limit=10")
+fetch(pokemonUrl)
     .then(res => res.json())
     .then(data => {
         // sort data by alphabetic order of pokemon names
