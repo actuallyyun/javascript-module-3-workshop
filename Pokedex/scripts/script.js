@@ -38,7 +38,6 @@ const processPokemonData = (data) => {
 
 //1.4 Display pokemon 
 const displayPokemon = (data) => {
-    console.log(data)
     //Create a div with Bootstrap .row class
     const divRow = document.createElement("div")
     divRow.classList.add("row")
@@ -60,8 +59,6 @@ const displayPokemon = (data) => {
         divCol.append(card)
         divRow.append(divCol)
         pokemonCardContainer.append(divRow)
-
-        addEventListenerToCard(card)
 
         return { name: pokemon.name, element: divCol }
 
@@ -98,30 +95,30 @@ function setPokemonColor(pokemonId, card, id) {
 }
 
 
-function addEventListenerToCard(card) {
-    card.addEventListener('click', function (event) {
-        //hide the card and show pokemon info
-        pokemonCardContainer.classList.add('d-none')
-        showPokemonInfo(card)
-    })
-}
 
+function searchPokemon(e) {
 
+    const input = e.data
 
-//Step 2 Setup the search box
-const searchInput = document.querySelector("[data-search]")
-searchInput.addEventListener("input", (e) => {
-    const value = e.target.value
-    pokemons.forEach(pokemon => {
-        const isVisible = pokemon.name.includes(value)
-        if (!isVisible) {
+    if (!input) {
+        pokemons.forEach(pokemon => {
+            pokemon.element.classList.remove('d-none')
+        })
+    } else {
+        pokemons.filter(pokemon =>
+            !(pokemon.name.includes(input))
+        ).forEach(pokemon => {
             pokemon.element.classList.add("d-none")
-        }
-        else {
-            pokemon.element.classList.remove("d-none")
-        }
-    })
-})
+        })
+
+        pokemons.filter(pokemon => pokemon.name.includes(input))
+            .forEach(pokemon => {
+                pokemon.element.classList.remove("d-none")
+            })
+    }
+
+
+};
 
 //Step 3 Show more Pokemons
 const showMorePokemonBtn = document.querySelector("#show-more-pokemons")
