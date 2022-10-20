@@ -1,7 +1,7 @@
 
 //Global variable
 let pokemonUrl = "https://pokeapi.co/api/v2/pokemon/"
-let pokemons = []
+let allPokemons = []
 
 
 //Util functions
@@ -46,7 +46,7 @@ const displayPokemon = (data) => {
     pokemons = data.map(pokemon => {
         //First create html element for the card
         const divCol = document.createElement("div")
-        divCol.classList.add("col-4", "col-lg-2", "pb-4")
+        divCol.classList.add("col-4", "col-lg-3", "pb-4")
 
         const card = pokemonCardTemplate.content.cloneNode(true).children[0]
 
@@ -63,6 +63,8 @@ const displayPokemon = (data) => {
         return { name: pokemon.name, element: divCol }
 
     })
+    allPokemons = allPokemons.concat(pokemons)
+
 
 }
 
@@ -73,7 +75,6 @@ function setPokemonIdAndImage(url, card) {
     fetch(url)
         .then(res => res.json())
         .then(data => {
-            // console.log(data)
             id.textContent = `#${data.id}`
             image.src = data.sprites.other.home.front_default
             setPokemonColor(data.id, card, id)
@@ -101,17 +102,17 @@ function searchPokemon(e) {
     const input = e.data
 
     if (!input) {
-        pokemons.forEach(pokemon => {
+        allPokemons.forEach(pokemon => {
             pokemon.element.classList.remove('d-none')
         })
     } else {
-        pokemons.filter(pokemon =>
+        allPokemons.filter(pokemon =>
             !(pokemon.name.includes(input))
         ).forEach(pokemon => {
             pokemon.element.classList.add("d-none")
         })
 
-        pokemons.filter(pokemon => pokemon.name.includes(input))
+        allPokemons.filter(pokemon => pokemon.name.includes(input))
             .forEach(pokemon => {
                 pokemon.element.classList.remove("d-none")
             })
